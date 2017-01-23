@@ -1,10 +1,5 @@
 # burze.dzis.net
 ## jak używać?
-
-
-
-
-
 #### w pliku app.js
 ```javascript
 var express = require('express');
