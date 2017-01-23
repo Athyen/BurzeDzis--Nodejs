@@ -41,6 +41,6 @@ app.get('/', function (req, res) {
 app.listen(3000);
 ```
 
-### Każda odpowiedź serwera jest w formacie JSON i zawiera właściwości jaki success i error
+### Każda odpowiedź serwera jest w formacie JSON i zawiera właściwości jak success i error
 
 W razie problemów proszę pisać na mjura8420[at]gmail.com
