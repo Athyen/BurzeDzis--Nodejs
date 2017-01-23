@@ -7,8 +7,8 @@ var assert = require('assert');
 
 var url = 'https://burze.dzis.net/soap.php?WSDL';
 var key = 'your key api';
-var range = 100
-var client = new (require('./lib/soap.js'))(url, key, range);
+var range = 100;
+var client = new (require('./soap.js'))(url, key, range);
 
 client.on('connect', function (err) {
     assert.ifError(err);
