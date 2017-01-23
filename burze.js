@@ -19,7 +19,7 @@ class Client extends EventEmitter {
     }
     createClient() {
         var self = this;
-        soap.createClient(self.url, function (err, client) {
+        soap.createClient(self.url, function(err, client) {
             self.emit('connect', err ? err : null);
             if (!err) {
                 self.isReady = true;
@@ -48,7 +48,7 @@ class Client extends EventEmitter {
                 y: coords.y,
                 promien: self.range,
                 klucz: self.key
-            }, function (err, result) {
+            }, function(err, result) {
                 if (err) {
                     return handleError(ERROR_CODES.auth, 2, cb);
                 };
@@ -76,7 +76,7 @@ class Client extends EventEmitter {
             self.client.miejscowosc({
                 nazwa: specialCharacter(city),
                 klucz: self.key
-            }, function (err, result) {
+            }, function(err, result) {
                 if (err) {
                     return handleError(ERROR_CODES.auth, 2, cb);
                 };
@@ -120,7 +120,7 @@ class Client extends EventEmitter {
                 x: coords.x,
                 y: coords.y,
                 klucz: self.key
-            }, function (err, result) {
+            }, function(err, result) {
                 if (err) {
                     return handleError(ERROR_CODES.auth, 2, cb);
                 };
@@ -167,7 +167,7 @@ function specialCharacter(str) {
         '&': '&amp;',
         '"': '&quot;'
     };
-    return String(str).replace(/[<>&"]/g, function (c) {
+    return String(str).replace(/[<>&"]/g, function(c) {
         return character[c];
     });
 }
