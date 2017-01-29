@@ -19,7 +19,7 @@ class Client extends EventEmitter {
     }
     createClient() {
         var self = this;
-        soap.createClient(self.url, function(err, client) {
+        soap.createClient(self.url, function (err, client) {
             self.emit('connect', err ? err : null);
             if (!err) {
                 self.isReady = true;
@@ -48,7 +48,7 @@ class Client extends EventEmitter {
                 y: coords.y,
                 promien: self.range,
                 klucz: self.key
-            }, function(err, result) {
+            }, function (err, result) {
                 if (err) {
                     return handleError(ERROR_CODES.auth, 2, cb);
                 };
@@ -76,7 +76,7 @@ class Client extends EventEmitter {
             self.client.miejscowosc({
                 nazwa: specialCharacter(city),
                 klucz: self.key
-            }, function(err, result) {
+            }, function (err, result) {
                 if (err) {
                     return handleError(ERROR_CODES.auth, 2, cb);
                 };
@@ -120,7 +120,7 @@ class Client extends EventEmitter {
                 x: coords.x,
                 y: coords.y,
                 klucz: self.key
-            }, function(err, result) {
+            }, function (err, result) {
                 if (err) {
                     return handleError(ERROR_CODES.auth, 2, cb);
                 };
@@ -137,6 +137,45 @@ class Client extends EventEmitter {
 
         } else {
             return handleError(ERROR_CODES.notReady, 1, cb);
+        }
+    }
+    series(arr) {
+        var self = this;
+        if (Array.isArray(arr)) {
+            var result = {};
+            return new Promise(function (resolve, reject) {
+                var x = arr.filter(function (city) {
+                    return typeof city === 'string';
+                }).filter(function (city, index, arr) {
+                    return index === arr.indexOf(city);
+                });
+
+                function next() {
+                    var city = x.shift();
+                    if (city) {
+                        self.getCoordsByName(city, function (response) {
+                            if (response.success) {
+                                self.getLightnings({
+                                    x: response.success.x,
+                                    y: response.success.y
+                                }, function (response) {
+                                    if (response.success) {
+                                        result[city] = response.success;
+                                    } else {
+                                        reject(response.error);
+                                    }
+                                    next();
+                                })
+                            } else {
+                                reject(response.error);
+                            }
+                        });
+                    } else {
+                        resolve(result);
+                    }
+                }
+                next();
+            });
         }
     }
 }
@@ -167,7 +206,7 @@ function specialCharacter(str) {
         '&': '&amp;',
         '"': '&quot;'
     };
-    return String(str).replace(/[<>&"]/g, function(c) {
+    return String(str).replace(/[<>&"]/g, function (c) {
         return character[c];
     });
 }
