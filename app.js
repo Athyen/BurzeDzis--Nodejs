@@ -3,7 +3,7 @@ var app = express();
 var assert = require('assert');
 
 var url = 'https://burze.dzis.net/soap.php?WSDL';
-var key = '35fd0b78a979128f6241d457b4b12ef299a16c32';
+var key = '';
 var range = 100;
 var client = new (require('./burze.js'))(url, key, range);
 
