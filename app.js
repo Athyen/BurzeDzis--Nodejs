@@ -3,34 +3,36 @@ var app = express();
 var assert = require('assert');
 
 var url = 'https://burze.dzis.net/soap.php?WSDL';
-var key = '';
+var key = '35fd0b78a979128f6241d457b4b12ef299a16c32';
 var range = 100;
-var client = new (require('./burze.js'))(url, key, range);
+var client = new(require('./burze.js'))(url, key, range);
 
 client.on('connect', function (err) {
     assert.ifError(err);
 });
 
 app.get('/', function (req, res) {
-//    client.getCoordsByName(req.query.city, function (coords) {
-//        if (coords.success) {
-//            var x = coords.success.x;
-//            var y = coords.success.y;
-//            client.getLightnings({
-//                x: x,
-//                y: y
-//            }, function (data) {
-//                res.json(data);
-//            });
-//        };
-//        if (coords.error) {
-//            res.json(coords);
-//        };
+//    client.getCoordsByName('Katowice').then(function (coords) {
+//        
+//        client.getLightnings(coords).then(function (lightnings) {
+//            res.json(lightnings);
+//        }).catch(function (err) {
+//            res.json(err);
+//        });
+//        
+//        client.getWarnings(coords).then(function(warnings){
+//            console.log(warnings)
+//        }).catch(function(err){
+//            console.log(err);
+//        })
+//        
+//    }).catch(function (err) {
+//        res.json(err);
 //    });
-    
-    client.series(['Kraków', 'Katowice', 'Kielce']).then(function(response){
-        res.json(response);
-    }).catch(function(error){
+//    
+    client.series(['Kraków', 'Katowice', 'Kielce', 'Warszawa', 'Gdańsk']).then(function (lightnings) { // built-in method client.getLightnings()
+        res.json(lightnings);
+    }).catch(function (error) {
         res.json(error);
     });
 });
