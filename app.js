@@ -1,40 +1,25 @@
-var express = require('express');
-var app = express();
-var assert = require('assert');
-
+var key = 'Your key API';
 var url = 'https://burze.dzis.net/soap.php?WSDL';
-var key = 'KEY';
 var range = 100;
-var client = new(require('./burze.js'))(url, key, range);
+var lightnings = require('./burze.js');
 
-client.on('connect', function (err) {
-    assert.ifError(err);
-});
+lightnings(url, key, range, function (client) {
 
-app.get('/', function (req, res) {
-//    client.getCoordsByName('Katowice').then(function (coords) {
-//        
-//        client.getLightnings(coords).then(function (lightnings) {
-//            res.json(lightnings);
-//        }).catch(function (err) {
-//            res.json(err);
-//        });
-//        
-//        client.getWarnings(coords).then(function(warnings){
-//            console.log(warnings)
-//        }).catch(function(err){
-//            console.log(err);
-//        })
-//        
-//    }).catch(function (err) {
-//        res.json(err);
-//    });
-//    
-    client.series(['Kraków', 'Katowice', 'Kielce', 'Warszawa', 'Gdańsk']).then(function (lightnings) { // built-in method client.getLightnings()
-        res.json(lightnings);
-    }).catch(function (error) {
-        res.json(error);
+    client.lightning('Katowice').then(function (lightning) {
+        console.log(lightning);
+    }).catch(function (err) {
+        console.log(err)
     });
-});
 
-app.listen(3000);
+
+    client.lightningSeries(['Katowice', 'Warszawa', 'Kraków', 'Poznań']).then(function (lightnings) {
+        console.log(lightnings)
+    }).catch(function (err) {
+        console.log(err)
+    })
+
+
+    client.warnings('Katowice').then(function (warnings) {
+        console.log(warnings)
+    })
+});
