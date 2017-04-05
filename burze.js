@@ -27,11 +27,17 @@ var lightnings = (function (url, auth, range, success) {
                             reject(err);
                             return;
                         }
-                        resolve({
-                            liczba: Number(warnings.return.liczba.$value),
-                            odleglosc: Number(warnings.return.odleglosc.$value),
-                            okres: Number(warnings.return.okres.$value)
-                        })
+                        try { // usuwanie błędów ze zmian API
+                            resolve({
+                                liczba: Number(warnings.return.liczba.$value),
+                                odleglosc: Number(warnings.return.odleglosc.$value),
+                                okres: Number(warnings.return.okres.$value),
+                                kierunek: warnings.return.kierunek.$value,
+                                range: range
+                            })
+                        } catch (e) {
+                            reject('błąd podczas zbierania informacjii');
+                        }
                     })
                 })
             });
@@ -80,14 +86,19 @@ var lightnings = (function (url, auth, range, success) {
                             reject(err);
                             return;
                         }
-                        resolve({
-                            mroz: warnings.return.mroz.$value,
-                            upal: warnings.return.upal.$value,
-                            wiatr: warnings.return.wiatr.$value,
-                            opad: warnings.return.opad.$value,
-                            burza: warnings.return.burza.$value,
-                            traba: warnings.return.traba.$value
-                        });
+                        try {
+                            resolve({
+                                mroz: warnings.return.mroz.$value,
+                                upal: warnings.return.upal.$value,
+                                wiatr: warnings.return.wiatr.$value,
+                                opad: warnings.return.opad.$value,
+                                burza: warnings.return.burza.$value,
+                                traba: warnings.return.traba.$value,
+                                range: range
+                            });
+                        } catch (e) {
+                            reject('błąd podczas zbierania informacjii');
+                        }
                     });
                 })
             })
@@ -104,7 +115,7 @@ var lightnings = (function (url, auth, range, success) {
                 var x = response.return.x.$value;
                 var y = response.return.y.$value;
                 if (Number(x) === 0 && Number(y) === 0) {
-                    callback("miejscowość: " + name.toUpperCase() + " nie istnieje");
+                    callback("miejscowość: " + name.toLowerCase() + " nie istnieje");
                     return;
                 }
                 callback(null, {
